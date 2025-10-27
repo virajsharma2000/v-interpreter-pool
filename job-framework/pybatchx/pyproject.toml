@@ -1,0 +1,10 @@
+[project]
+name = "pybatchx"
+version = "0.1.0"
+description = "Interpreter-based batch scheduler framework for Python"
+requires-python = ">=3.14"
+dependencies = ["pyyaml"]
+
+[tool.uv]
+# Enable uv for dependency management and environment isolation
+# enable = true

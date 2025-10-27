@@ -1,0 +1,18 @@
+scheduler:
+  interval: 10
+  max_workers: 4
+  retry_policy:
+    max_attempts: 3
+    backoff: 5
+
+jobs:
+  - name: daily_report
+    script: jobs/daily_report.py
+    schedule: "*/2 * * * *"
+    enabled: true
+
+  - name: cleanup_job
+    module: jobs.cleanup
+    function: cleanup_old_records
+    schedule: "*/5 * * * *"
+    enabled: true
