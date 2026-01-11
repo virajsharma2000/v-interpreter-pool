@@ -1,21 +1,32 @@
 from concurrent.futures import InterpreterPoolExecutor
-import datetime, time
+import  time
 
-def run_job(job_name, payload):
-    print(f"[{datetime.datetime.now()}] Running {job_name} with {payload}")
-    return sum(range(payload))
+def run_job(job_name, payload, interval_sec):
+    #print(f"[{datetime.datetime.now()}] Running {job_name} with {payload}")
+    time.sleep(interval_sec)
+
+    if job_name == '+':
+      return sum(range(payload))
+    
+    elif job_name == 'max':
+     return max(range(payload))
 
 def scheduler_loop(jobs, interval_sec=5):
     with InterpreterPoolExecutor(max_workers=4) as executor:
         while True:
+            futures = []
+
             for job in jobs:
-                future = executor.submit(run_job, job["name"], job["data"])
-                future.add_done_callback(lambda f: print(f"Result: {f.result()}"))
-            time.sleep(interval_sec)
+                future = executor.submit(run_job, job["name"], job["data"], interval_sec)
+                futures.append(future)
+
+            for f in futures:
+             print(f.result())
+                
 
 if __name__ == "__main__":
     jobs = [
-        {"name": "Job-A", "data": 10_000_000},
-        {"name": "Job-B", "data": 5_000_000},
+        {"name": "+", "data": 10_000_000},
+        {"name": "max", "data": 5_000_000},
     ]
     scheduler_loop(jobs)
