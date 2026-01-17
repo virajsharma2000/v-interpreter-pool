@@ -9,9 +9,9 @@ def run_job(job_name, payload, interval_sec):
       return sum(range(payload))
     
     elif job_name == 'max':
-     return max(range(payload))
+     return sum(range(payload)) / len(range(payload))
 
-def scheduler_loop(jobs, interval_sec=5):
+def scheduler_loop(jobs, interval_sec = 5):
     with InterpreterPoolExecutor(max_workers=4) as executor:
         while True:
             futures = []
@@ -27,6 +27,6 @@ def scheduler_loop(jobs, interval_sec=5):
 if __name__ == "__main__":
     jobs = [
         {"name": "+", "data": 10_000_000},
-        {"name": "max", "data": 5_000_000},
+        {"name": "mean", "data": 5_000_000},
     ]
     scheduler_loop(jobs)
